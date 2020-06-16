@@ -17,6 +17,31 @@ void read_line(int sockd, char *line);
 int main(int argc, char *argv[]){
   
   /* Do more magic */
+  char ip[50];
+	int port = 0;
+	char buffer[MAX_LINE_SIZE];
+
+	if (argc != 2) {
+		printf("Usage1: ./server ipto_listenon:port\n");
+		return 0;
+	}
+
+	int len = strlen(argv[1]);
+	for (int i = 0; i < len; i++) {
+		if (argv[1][i] == ':') {
+			argv[1][i] = ' ';
+		}
+	}
+	printf("%s\n", argv[1]);
+	if (sscanf(argv[1], "%s%d", ip, &port) != 2) {
+		printf("Usage2: ./server ipto_listenon:port\n");
+		return 0;
+	}
   
+  struct sockaddr_in addr;
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+	addr.sin_addr.s_addr = inet_addr(ip);
+	memset(&(addr.sin_zero), 0, 8);
 
 }
