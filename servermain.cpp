@@ -13,6 +13,7 @@
 
 using namespace std;
 void read_line(int sockd, char *line);
+void createEquation(char* buffer, char* result);
 
 int main(int argc, char *argv[]){
   
@@ -116,4 +117,35 @@ void read_line(int sockd, char *line) {
 			line[count++] = c;
 		}
 	}
+}
+
+void createEquation(char* buffer, char* result) {
+	char *ptr = randomType(); // Get a random arithemtic operator.
+
+	double f1, f2, fresult;
+	int i1, i2, iresult;
+
+	
+	if (ptr[0] == 'f') {
+		//printf("Float\t");
+		f1 = randomFloat();
+		f2 = randomFloat();
+
+		
+		sprintf(buffer, "%8.8g %8.8g", f1, f2);
+		sscanf(buffer, "%lf%lf", &f1, &f2);
+
+		if (strcmp(ptr, "fadd") == 0) {
+			fresult = f1 + f2;
+		} else if (strcmp(ptr, "fsub") == 0) {
+			fresult = f1 - f2;
+		} else if (strcmp(ptr, "fmul") == 0) {
+			fresult = f1 * f2;
+		} else if (strcmp(ptr, "fdiv") == 0) {
+			fresult = f1 / f2;
+		}
+		sprintf(buffer, "%s %8.8g %8.8g\n", ptr, f1, f2);
+		sprintf(result, "%8.8g", fresult);
+	}
+
 }
