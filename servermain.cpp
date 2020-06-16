@@ -100,3 +100,20 @@ initCalcLib();
 		}
 	}
 }
+
+void read_line(int sockd, char *line) {
+	char c;
+	int count = 0;
+	int maxLen = MAX_LINE_SIZE;
+
+	memset(line, 0, maxLen);
+	while (read(sockd, &c, 1) == 1) {
+		if (c == '\n') {
+			break;
+		}
+
+		if (count < maxLen) {
+			line[count++] = c;
+		}
+	}
+}
