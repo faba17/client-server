@@ -55,3 +55,48 @@ int main(int argc, char *argv[]){
 		printf("listen error\n");
 		return 0;
    }
+	
+initCalcLib();
+
+	while (1) {
+		
+		printf("waiting...\n");
+		struct sockaddr_in client_addr;
+		int sockd = accept(serverSockd, (struct sockaddr *) &client_addr,
+				&addr_len);
+
+		if (sockd < 0) {
+			printf("Error: accept failed.\n");
+			continue;
+		}
+
+		sprintf(buffer, "TEXT TCP 1.0\n\n");
+		send(sockd, buffer, strlen(buffer), 0);
+
+		read_line(sockd, buffer);
+		if (strcmp("OK", buffer) == 0) {
+			char result[100];
+			char userResult[100];
+			createEquation(buffer, result);
+
+			printf("%sanswer:%s\n", buffer, result);
+			
+                send(sockd, buffer, strlen(buffer), 0);
+
+			read_line(sockd, userResult);
+			printf("user: %s\n", userResult);
+
+			if (strcmp(userResult, result) == 0) {
+				sprintf(buffer, "OK\n");
+				send(sockd, buffer, strlen(buffer), 0);
+			} else {
+				sprintf(buffer, "ERROR\n");
+				send(sockd, buffer, strlen(buffer), 0);
+			}
+
+			close(sockd);
+		} else {
+			close(sockd);
+		}
+	}
+}
