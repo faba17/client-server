@@ -43,5 +43,15 @@ int main(int argc, char *argv[]){
 	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = inet_addr(ip);
 	memset(&(addr.sin_zero), 0, 8);
-
-}
+	
+  int serverSockd = socket(AF_INET, SOCK_STREAM, 0);
+  socklen_t addr_len = sizeof(struct sockaddr_in);
+  if (bind(serverSockd, (struct sockaddr *) &addr, addr_len) == -1) {
+      printf("bind error\n");
+      return 0;
+   }
+	
+   if (listen(serverSockd, 10) == -1) {
+		printf("listen error\n");
+		return 0;
+   }
