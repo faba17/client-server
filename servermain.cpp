@@ -147,5 +147,23 @@ void createEquation(char* buffer, char* result) {
 		sprintf(buffer, "%s %8.8g %8.8g\n", ptr, f1, f2);
 		sprintf(result, "%8.8g", fresult);
 	}
+else {
+		//printf("Int\t");
+		i1 = randomInt();
+		i2 = randomInt();
+
+		if (strcmp(ptr, "add") == 0) {
+			iresult = i1 + i2;
+		} else if (strcmp(ptr, "sub") == 0) {
+			iresult = i1 - i2;
+		} else if (strcmp(ptr, "mul") == 0) {
+			iresult = i1 * i2;
+		} else if (strcmp(ptr, "div") == 0) {
+			iresult = i1 / i2;
+		}
+
+		sprintf(buffer, "%s %d %d\n", ptr, i1, i2);
+		sprintf(result, "%d", iresult);
+	}
 
 }
