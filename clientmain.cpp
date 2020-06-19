@@ -54,3 +54,27 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
+int acceptServer = 0;
+	while (1) {
+		read_line(sockd, buffer);
+		printf("%s\n", buffer);
+
+		if (strcmp("TEXT TCP 1.0", buffer) == 0) {
+			acceptServer = 1;
+		}
+
+		if (strlen(buffer) == 0) {
+			//got a empty line, protocol data is end
+			break;
+		}
+	}
+
+	if (acceptServer) {
+		sprintf(buffer, "OK\n");
+		send(sockd, buffer, strlen(buffer), 0);
+	} else {
+		sprintf(buffer, "NO\n");
+		send(sockd, buffer, strlen(buffer), 0);
+		close(sockd);
+		return 0;
+	}
