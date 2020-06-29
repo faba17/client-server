@@ -78,3 +78,47 @@ int acceptServer = 0;
 		close(sockd);
 		return 0;
 	}
+	char command[20];
+	double value1 = 0, value2 = 0;
+
+	read_line(sockd, buffer);
+	sscanf(buffer, "%s%lf%lf", command, &value1, &value2);
+	printf("%s %8.8g %8.8g\n", command, value1, value2);
+
+	double result = 0;
+
+	strcpy(buffer, "");
+	if (strcmp("add", command) == 0) {
+		result = value1 + value2;
+		sprintf(buffer, "%d", (int) result);
+	} else if (strcmp("div", command) == 0) {
+		result = value1 / value2;
+		sprintf(buffer, "%d", (int) result);
+	} else if (strcmp("mul", command) == 0) {
+		result = value1 * value2;
+		sprintf(buffer, "%d", (int) result);
+	} else if (strcmp("sub", command) == 0) {
+		result = value1 - value2;
+		sprintf(buffer, "%d", (int) result);
+	} else if (strcmp("fadd", command) == 0) {
+		result = value1 + value2;
+		sprintf(buffer, "%8.8g", result);
+	} else if (strcmp("fdiv", command) == 0) {
+		result = value1 / value2;
+		sprintf(buffer, "%8.8g", result);
+	} else if (strcmp("fmul", command) == 0) {
+		result = value1 * value2;
+		sprintf(buffer, "%8.8g", result);
+	} else if (strcmp("fsub", command) == 0) {
+		result = value1 - value2;
+		sprintf(buffer, "%8.8g", result);
+	}
+		strcat(buffer, "\n");
+	printf("%s", buffer);
+	send(sockd, buffer, strlen(buffer), 0);
+
+	//read response from server
+	read_line(sockd, buffer);
+	printf("%s\n", buffer);
+	close(sockd);
+}
