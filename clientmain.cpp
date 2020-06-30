@@ -13,11 +13,10 @@
 
 #define MAX_LINE_SIZE 256
 
-//Read one line data coming in from socket
 void read_line(int sockd, char *line);
 
 int main(int argc, char *argv[]) {
-	//parse arguments: referenceIP:refPort
+	
 	char ip[50];
 	int port = 0;
 	char buffer[MAX_LINE_SIZE];
@@ -38,14 +37,14 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
-	//create socket address
+	
 	struct sockaddr_in addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = inet_addr(ip);
 	memset(&(addr.sin_zero), 0, 8);
 
-	//create client socket
+	
 	int sockd = socket(AF_INET, SOCK_STREAM, 0);
 
 	socklen_t addr_len = sizeof(struct sockaddr_in);
@@ -54,7 +53,8 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
-int acceptServer = 0;
+	
+	int acceptServer = 0;
 	while (1) {
 		read_line(sockd, buffer);
 		printf("%s\n", buffer);
@@ -64,7 +64,7 @@ int acceptServer = 0;
 		}
 
 		if (strlen(buffer) == 0) {
-			//got a empty line, protocol data is end
+			
 			break;
 		}
 	}
@@ -78,6 +78,9 @@ int acceptServer = 0;
 		close(sockd);
 		return 0;
 	}
+
+
+
 	char command[20];
 	double value1 = 0, value2 = 0;
 
@@ -113,15 +116,19 @@ int acceptServer = 0;
 		result = value1 - value2;
 		sprintf(buffer, "%8.8g", result);
 	}
-		strcat(buffer, "\n");
+
+	
+	strcat(buffer, "\n");
 	printf("%s", buffer);
 	send(sockd, buffer, strlen(buffer), 0);
 
-	//read response from server
+	
 	read_line(sockd, buffer);
 	printf("%s\n", buffer);
 	close(sockd);
 }
+
+
 void read_line(int sockd, char *line) {
 	char c;
 	int count = 0;
@@ -138,3 +145,4 @@ void read_line(int sockd, char *line) {
 		}
 	}
 }
+
